@@ -48,7 +48,20 @@ int main()
 
 		}
 	}
+	eliminateLeftRecursion(variables, terminals, productions);
+	return 0;
+}
 
+int eliminateLeftRecursion(int variables[256], int terminals[256], \
+	Production productions[256])
+{
+	int i;
+	int j;
+	for (i = 0; i < 256; i++) {
+		if (variables[i]) {
+			printf("%c: %d\n", i, isLeftRecursive(productions[i], i));
+		}
+	}
 	return 0;
 }
 
