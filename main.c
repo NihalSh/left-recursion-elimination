@@ -81,9 +81,13 @@ int eliminateLeftRecursion(int variables[256], int terminals[256], \
 				Body * oldList = productions[i].list;
 				for (j = 0; j < productions[i].number; j++) {
 					if (bodyStatus[j] == 0) {
-						printf("%s -> %s\n", variableStr, strncat(oldList[j].c, newVariableStr, BODY_SIZE - 1 - oldList[j].number));
+						printf("%s -> %s\n", variableStr, \
+							strncat(oldList[j].c, newVariableStr, \
+								BODY_SIZE - 1 - oldList[j].number));
 					} else if (bodyStatus[j] == 1) {
-						printf("%s -> %s\n", newVariableStr, strncat(oldList[j].c, newVariableStr, BODY_SIZE - 1 - oldList[j].number));
+						printf("%s -> %s\n", newVariableStr, \
+							strncat(oldList[j].c + 1, newVariableStr, \
+								BODY_SIZE - 1 - oldList[j].number));
 					} else {
 						printf("An error has occured\n");
 						exit(EXIT_FAILURE);
