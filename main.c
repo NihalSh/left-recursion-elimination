@@ -61,6 +61,23 @@ int eliminateLeftRecursion(int variables[256], int terminals[256], \
 		if (variables[i]) {
 			int * bodyStatus = isLeftRecursive(productions[i], i);
 			if (bodyStatus) {
+				/*first find a free variable*/
+				int newVariable = 0;
+				for (j = 'A'; j <= 'Z'; j++) {
+					if (!variables[j]) {
+						newVariable = j;
+						break;
+					}
+				}
+				variables[newVariable] = 1;
+				
+				char variableStr[2] = {(char) i, '\0'};
+				char newVariableStr[2] = {(char) newVariable, '\0'};
+				printf("Old Variable: %s\n", variableStr);
+				printf("New Variable: %s\n", newVariableStr);
+				for (j = 0; j < productions[i].number; j++) {
+					;
+				}
 				printf("%c: true\n", i);
 			}
 		}
