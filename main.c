@@ -13,7 +13,7 @@ typedef struct {
 } Production;
 
 int getInput(int * variables, int * terminals, Production productions[256]);
-int isLeftRecursive(Production production, int variable);
+int * isLeftRecursive(Production production, int variable);
 
 int main()
 {
@@ -59,25 +59,38 @@ int eliminateLeftRecursion(int variables[256], int terminals[256], \
 	int j;
 	for (i = 0; i < 256; i++) {
 		if (variables[i]) {
-			printf("%c: %d\n", i, isLeftRecursive(productions[i], i));
+			int * bodyStatus = isLeftRecursive(productions[i], i);
+			if (bodyStatus) {
+				printf("%c: true\n", i);
+			}
 		}
 	}
 	return 0;
 }
 
-int isLeftRecursive(Production production, int variable)
+int * isLeftRecursive(Production production, int variable)
 {
 	int i;
+	int * recursiveBody = NULL;
 	if (production.number) {
+		int flag = 0;
+		recursiveBody = (int *) malloc(sizeof(int) * production.number);
 		for (i = 0; i < production.number; i++) {
 			if (production.list[i].number) {
 				if (production.list[i].c[0] == (char) variable) {
-					return 1;
+					flag = 1;
+					recursiveBody[i] = 1;
+					continue;
 				}
 			}
+			recursiveBody[i] = 0;
+		}
+		if (!flag) {
+			free(recursiveBody);
+			recursiveBody = NULL;
 		}
 	}
-	return 0;
+	return recursiveBody;
 }
 
 int getInput(int * variables, int * terminals, Production productions[256])
