@@ -13,6 +13,7 @@ typedef struct {
 } Production;
 
 int getInput(int * variables, int * terminals, Production productions[256]);
+int isLeftRecursive(Production production, int variable);
 
 int main()
 {
@@ -48,6 +49,21 @@ int main()
 		}
 	}
 
+	return 0;
+}
+
+int isLeftRecursive(Production production, int variable)
+{
+	int i;
+	if (production.number) {
+		for (i = 0; i < production.number; i++) {
+			if (production.list[i].number) {
+				if (production.list[i].c[0] == (char) variable) {
+					return 1;
+				}
+			}
+		}
+	}
 	return 0;
 }
 
