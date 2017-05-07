@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define BODY_SIZE 50
+
 typedef struct {
 	int number;
 	char * c;
@@ -57,6 +59,7 @@ int eliminateLeftRecursion(int variables[256], int terminals[256], \
 {
 	int i;
 	int j;
+	printf("Modified Productions:\n");
 	for (i = 0; i < 256; i++) {
 		if (variables[i]) {
 			int * bodyStatus = isLeftRecursive(productions[i], i);
@@ -70,15 +73,27 @@ int eliminateLeftRecursion(int variables[256], int terminals[256], \
 					}
 				}
 				variables[newVariable] = 1;
-				
+
 				char variableStr[2] = {(char) i, '\0'};
 				char newVariableStr[2] = {(char) newVariable, '\0'};
-				printf("Old Variable: %s\n", variableStr);
-				printf("New Variable: %s\n", newVariableStr);
+				//printf("Old Variable: %s\n", variableStr);
+				//printf("New Variable: %s\n", newVariableStr);
+				Body * oldList = productions[i].list;
 				for (j = 0; j < productions[i].number; j++) {
-					;
+					if (bodyStatus[j] == 0) {
+						printf("%s -> %s\n", variableStr, strncat(oldList[j].c, newVariableStr, BODY_SIZE - 1 - oldList[j].number));
+					} else if (bodyStatus[j] == 1) {
+						printf("%s -> %s\n", newVariableStr, strncat(oldList[j].c, newVariableStr, BODY_SIZE - 1 - oldList[j].number));
+					} else {
+						printf("An error has occured\n");
+						exit(EXIT_FAILURE);
+					}
 				}
-				printf("%c: true\n", i);
+				//printf("%c: true\n", i);
+			} else if (productions[i].number) {
+				for (j = 0; j < productions[i].number; j++) {
+					printf("%c -> %s\n", i, productions[i].list[j].c);
+				}
 			}
 		}
 	}
@@ -119,7 +134,7 @@ int getInput(int * variables, int * terminals, Production productions[256])
 	int numTerminals;
 	int numProductions;
 	char head;
-	char body[50];//just an assumption for input length
+	char body[BODY_SIZE];//just an assumption for input length
 	printf("Variables: ");
 	scanf(" %d", &numVariables);
 	for (i = 0; i < numVariables; i++) {
